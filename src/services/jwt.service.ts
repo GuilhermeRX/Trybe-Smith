@@ -5,8 +5,8 @@ dotenv.config();
 const secret = 'olaolaola';
 
 class JwtService {
-  create = async (id: number) => {
-    const token = sign({ id }, secret, {
+  create = async (id: number, username: string) => {
+    const token = sign({ id, username }, secret, {
       expiresIn: '7d',
       algorithm: 'HS256',
     });
