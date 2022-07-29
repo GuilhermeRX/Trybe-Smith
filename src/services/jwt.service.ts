@@ -6,7 +6,7 @@ const secret = 'olaolaola';
 
 class JwtService {
   create = async (id: number) => {
-    const token = sign({ data: id }, secret, {
+    const token = sign({ id }, secret, {
       expiresIn: '7d',
       algorithm: 'HS256',
     });
