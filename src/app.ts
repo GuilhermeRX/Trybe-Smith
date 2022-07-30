@@ -16,14 +16,16 @@ app.use('/users', userRouter);
 app.use('/orders', orderRouter);
 
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
-  const { message, code } = err;
+  const { message } = err;
 
   switch (true) {
     case message.includes('required'): res.status(400).json({ message });
       break;
     case message.includes('invalid'): res.status(401).json({ message });
       break;
-    default: res.status(code || 500).json({ message });
+    case message.includes('string'): res.status(422).json({ message });
+      break;
+    default: res.status(422).json({ message });
   }
 });
 
