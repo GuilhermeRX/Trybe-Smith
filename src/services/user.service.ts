@@ -1,3 +1,4 @@
+import Joi from 'joi';
 import User from '../interfaces/user.interface';
 import connection from '../models/connection';
 import UserModel from '../models/user.model';
@@ -12,6 +13,22 @@ class UserService {
     this.model = new UserModel(connection);
     this.jwt = new JwtService();
   }
+
+  validateBody = (user: User) => {
+    const schema = Joi.object({
+      username: Joi.string().required().min(3),
+      classe: Joi.string().required().min(3),
+      level: Joi.number().required().min(1),
+      password: Joi.string().required().min(8),
+    });
+
+    const { error, value } = schema.validate(user);
+
+    if (error) {
+      throw error;
+    }
+    return value;
+  };
 
   create = async (user: User): Promise<string> => {
     const id = await this.model.create(user);

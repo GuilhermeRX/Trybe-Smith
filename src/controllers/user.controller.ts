@@ -10,7 +10,7 @@ class UserController {
   }
 
   create = async (req: Request, res: Response) => {
-    const user = req.body;
+    const user = this.service.validateBody(req.body);
     const token = this.service.create(user);
     res.status(StatusCodes.CREATED).json({ token });
   };
