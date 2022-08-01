@@ -1,6 +1,8 @@
-interface Error {
-  message: string,
-  code?: number,
-}
+export default class PersonError extends Error {
+  public code: number;
 
-export default Error;
+  constructor(code: number) {
+    super();
+    this.code = code;
+  }
+}

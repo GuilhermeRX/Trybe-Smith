@@ -1,4 +1,5 @@
-import { Pool } from 'mysql2/promise';
+import { JwtPayload } from 'jsonwebtoken';
+import { Pool, ResultSetHeader } from 'mysql2/promise';
 import Order from '../interfaces/order.interface';
 import Product from '../interfaces/product.interface';
 
@@ -34,6 +35,14 @@ class OrderModel {
     const [orders] = await this.connection.query(sqlOrders);
     const formatOrder = await this.formatOrders(orders as Order[]);
     return formatOrder as Order[];
+  };
+
+  create = async (id: JwtPayload, array: number[]): Promise<void> => {
+    const sqlOrder = 'INSERT INTO Trybesmith.Orders (userId) VALUES (?);';
+    const [{ insertId }] = await this.connection.query<ResultSetHeader>(sqlOrder, [id]);
+
+    const sqlProduct = 'UPDATE Trybesmith.Products SET orderId = ? WHERE id IN (?)';
+    await this.connection.query(sqlProduct, [insertId, array]);
   };
 }
 

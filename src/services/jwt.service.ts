@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
-import { sign, verify } from 'jsonwebtoken';
+import { JwtPayload, sign, verify } from 'jsonwebtoken';
+import PersonError from '../interfaces/error.interface';
 
 dotenv.config();
 const secret = 'olaolaola';
@@ -13,12 +14,13 @@ class JwtService {
     return token;
   };
 
-  validateToken = async (token: string) => {
+  validateToken = (token: string) => {
     try {
       const data = verify(token, secret);
-      return data;
-    } catch (_err) {
-      const e = new Error('Expired or invalid token');
+      return data as JwtPayload;
+    } catch (err) {
+      const e = new PersonError(401);
+      e.message = 'Invalid token';
       throw e;
     }
   };
