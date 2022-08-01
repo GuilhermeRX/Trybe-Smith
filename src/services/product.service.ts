@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import PersonError from '../interfaces/error.interface';
 import Product from '../interfaces/product.interface';
 import connection from '../models/connection';
 import ProductModel from '../models/product.model';
@@ -24,7 +25,9 @@ class ProductService {
     const { error, value } = schema.validate(product);
 
     if (error) {
-      throw error;
+      const myError = new PersonError(422);
+      myError.message = error.message;
+      throw myError;
     }
     return value;
   };

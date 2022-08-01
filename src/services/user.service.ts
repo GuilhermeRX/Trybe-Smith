@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import PersonError from '../interfaces/error.interface';
 import User from '../interfaces/user.interface';
 import connection from '../models/connection';
 import UserModel from '../models/user.model';
@@ -25,7 +26,9 @@ class UserService {
     const { error, value } = schema.validate(user);
 
     if (error) {
-      throw error;
+      const myError = new PersonError(422);
+      myError.message = error.message;
+      throw myError;
     }
     return value;
   };
